@@ -4,7 +4,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 
+import com.diaraba.projetDeSoutenance.models.Structure;
 import com.diaraba.projetDeSoutenance.models.User;
+import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,25 @@ public class EmailConstructor {
 	@Autowired
 	private TemplateEngine templateEngine;
 
-	public MimeMessagePreparator constructNewUserEmail(User user) {
+
+	public MimeMessagePreparator constructNewStructureEmail(Structure structure) {
+		Context context = new Context();
+		context.setVariable("utilisateur", structure);
+		String text = templateEngine.process("newStructureEmailTemplate", context);
+		MimeMessagePreparator messagePreparator = new MimeMessagePreparator() {
+			@Override
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
+				email.setPriority(1);
+				email.setTo(structure.getEmail());
+				email.setSubject("Bienvenu sur Cogoya So");
+				email.setText(text, true);
+				email.setFrom(new InternetAddress(env.getProperty("support.email")));
+			}
+		};
+		return messagePreparator;
+	}
+	public MimeMessagePreparator constructNewUserEmail(Utilisateurs user) {
 		Context context = new Context();
 		context.setVariable("utilisateur", user);
 		String text = templateEngine.process("newUserEmailTemplate", context);

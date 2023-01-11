@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface StructureRepository extends JpaRepository<Structure, Long> {
-    Optional<Structure> findByAlias(String alias);
+  Structure findByAlias(String alias);
 
     Boolean existsByAlias(String alias);
 

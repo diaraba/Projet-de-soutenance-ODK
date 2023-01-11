@@ -39,5 +39,6 @@ public class ProfileUtilisateurs {
     @Size(max = 50)
     @Email
     private String situation;
-
+    @ManyToOne
+    Utilisateurs utilisateurs;
 }

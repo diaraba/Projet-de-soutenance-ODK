@@ -11,6 +11,7 @@ import java.util.Set;
 @Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateurs, Long> {
     boolean existsByEmail(String email);
+    boolean existsByNomutilisateur(String email);
 
     Utilisateurs findByNomutilisateur(String nomutilisateur);
 

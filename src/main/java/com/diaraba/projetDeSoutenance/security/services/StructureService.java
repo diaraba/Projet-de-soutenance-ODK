@@ -9,5 +9,5 @@ import java.util.Optional;
 @Service
 public interface StructureService {
     ResponseEntity<?> creerStructure(Structure structure);
-    Optional<Structure> trouverStructureparalias(String alias);
+    Structure trouverStructureparalias(String alias);
 }

@@ -19,7 +19,7 @@ public class StructureController {
     StructureService structureService;
 
     @GetMapping("afficherStructure/{alias}")
-    public Optional<Structure> affichertructureparalias(@PathVariable("alias")String alias){
+    public Structure affichertructureparalias(@PathVariable("alias")String alias){
         return structureService.trouverStructureparalias(alias);
     }
 }

@@ -32,12 +32,12 @@ public class UtilisateurServiceImpl implements  UtilisateurService {
 
 
     @Override
-    public /*ResponseEntity<?>*/ Utilisateurs creerUtilisateur(Utilisateurs utilisateurs) {
+    public ResponseEntity<?>  creerUtilisateur(Utilisateurs utilisateurs) {
 
         utilisateurRepository.save(utilisateurs);
-      ResponseEntity.ok(new MessageResponse("User registered successfully!")) ;
         mailSender.send(emailConstructor.constructNewUserEmail(utilisateurs));
-      return  utilisateurRepository.save(utilisateurs);
+      return ResponseEntity.ok(new MessageResponse("User enregistrer avec success!")) ;
+
     }
 
     @Override

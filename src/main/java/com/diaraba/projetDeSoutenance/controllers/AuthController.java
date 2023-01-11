@@ -129,14 +129,24 @@ public class AuthController {
   }*/
 
     @PostMapping("creerUtilisateur")
-    public /*ResponseEntity<?>*/Utilisateurs ajouterUtilisateur(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?>  ajouterUtilisateur(@RequestBody SignupRequest signupRequest) {
         Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur());
 
-        /*if (utilisateurRepository.existsByEmail(utilisateurs.getEmail())) {
+        if (utilisateurRepository.existsByNomutilisateur(signupRequest.getNomutilisateur())) {
             return ResponseEntity
                     .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
-        }*/
+                    .body(new MessageResponse("Error: NomUtilisateur existe déjà!"));
+        }
+
+        else if (structureRepository.existsByEmail(signupRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use___________!"));
+        }
+
+        else if (utilisateurRepository.existsByEmail(utilisateurs.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use*************!"));
+        }else{
 
         Set<String> strRoles = signupRequest.getRole();
 
@@ -171,8 +181,17 @@ public class AuthController {
         utilisateurs.setEmail(signupRequest.getEmail());
         utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
         return utilisateurService.creerUtilisateur(utilisateurs);
+        }
     }
 
+
+
+
+
+
+
+
+    //CREER STRUCTURE
 
     @PostMapping("creerStructure")
     public ResponseEntity<?> ajouterStructure(@RequestBody StructureRequest structureRequest) {
@@ -180,9 +199,20 @@ public class AuthController {
         structure.setEmail(structureRequest.getEmail());
         structure.setPassword(encoder.encode(structureRequest.getPassword()));
 
-        if (utilisateurRepository.existsByEmail(structure.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+        if (structureRepository.existsByAlias(structureRequest.getAlias())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Alias existe déjà !"));
         }
+        else if (structureRepository.existsByEmail(structureRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use___________!"));
+        }
+
+        else if (utilisateurRepository.existsByEmail(structure.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use*************!"));
+        }else {
 
         Set<String> strStatuts = structureRequest.getStatut();
 
@@ -236,6 +266,7 @@ public class AuthController {
         }
         structure.setRoles(roles);
         return structureService.creerStructure(structure);
+    }
     }
 
 
