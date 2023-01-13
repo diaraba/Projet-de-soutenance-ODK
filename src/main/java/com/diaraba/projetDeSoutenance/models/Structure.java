@@ -1,13 +1,18 @@
 package com.diaraba.projetDeSoutenance.models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Data
 @Table(name = "Structure"
        /* ,uniqueConstraints = {
                 @UniqueConstraint(columnNames = "alias"),
@@ -36,6 +41,12 @@ public class Structure extends User{
                 joinColumns = @JoinColumn(name = "structure_id"),
                 inverseJoinColumns = @JoinColumn(name = "statut_id"))
         private Set<Statut> statuts = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "structure_activite",
+            joinColumns = @JoinColumn(name="id_structure"),
+            inverseJoinColumns = @JoinColumn(name = "id_activite"))
+    private List<Activites> activites= new ArrayList<>();
 
         public Structure() {
         }
@@ -68,6 +79,9 @@ public class Structure extends User{
         public void setStatuts(Set<Statut> Statuts) {
                 this.statuts = Statuts;
         }
+
+
+
 
 
 }

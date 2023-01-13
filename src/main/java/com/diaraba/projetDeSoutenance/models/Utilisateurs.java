@@ -1,23 +1,32 @@
 package com.diaraba.projetDeSoutenance.models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "utilisateur")
+@Data
 public class Utilisateurs extends User{
     /*    @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;*/
 
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 50)
     private String nomutilisateur;
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "utilisateurs_activite",
+            joinColumns = @JoinColumn(name="id_structure"),
+            inverseJoinColumns = @JoinColumn(name = "id_activite"))
+    private List<Activites> activitesU= new ArrayList<>();
 
 
     public Utilisateurs() {

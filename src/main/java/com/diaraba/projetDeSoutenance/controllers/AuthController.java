@@ -132,6 +132,8 @@ public class AuthController {
     public ResponseEntity<?>  ajouterUtilisateur(@RequestBody SignupRequest signupRequest) {
         Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur());
 
+
+
         if (utilisateurRepository.existsByNomutilisateur(signupRequest.getNomutilisateur())) {
             return ResponseEntity
                     .badRequest()
@@ -164,6 +166,15 @@ public class AuthController {
                         roles.add(adminRole);
 
                         break;
+                    case "user":
+                        Role user = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(user);
+
+                        break;
+                    case "structure":
+                        Role structure = roleRepository.findByName(ERole.ROLE_STRUCTURE).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(structure);
+                        break;
       /*  case "mod":
           Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
               .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -176,7 +187,7 @@ public class AuthController {
                 }
             });
         }
-
+        utilisateurs.setActivitesU(signupRequest.getActivites());
         utilisateurs.setRoles(roles);
         utilisateurs.setEmail(signupRequest.getEmail());
         utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
@@ -197,8 +208,12 @@ public class AuthController {
     public ResponseEntity<?> ajouterStructure(@RequestBody StructureRequest structureRequest) {
         Structure structure = new Structure(structureRequest.getAlias());
         structure.setEmail(structureRequest.getEmail());
+        structure.setActivites(structureRequest.getActivites());
         structure.setPassword(encoder.encode(structureRequest.getPassword()));
 
+        System.out.println(structureRequest.getActivites());
+
+        System.out.println(structure.getActivites()+"secaind");
         if (structureRepository.existsByAlias(structureRequest.getAlias())) {
             return ResponseEntity
                     .badRequest()

@@ -23,6 +23,7 @@ public class AvisOffre {
     private String image;
 
     @NotBlank
+    @Size(max =10000)
     private String description;
 
     @NotBlank

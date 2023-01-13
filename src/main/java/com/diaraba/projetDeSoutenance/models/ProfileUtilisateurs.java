@@ -16,29 +16,22 @@ public class ProfileUtilisateurs {
     private Long id;
 
     @NotBlank
-    @Size(max = 50)
-    @Email
     private String nom;
 
     @NotBlank
-    @Size(max = 50)
-    @Email
     private String prenom;
 
     @NotBlank
-    @Size(max = 50)
-    @Email
     private String genre;
 
     @NotBlank
-    @Size(max = 50)
-    @Email
     private String numero;
 
     @NotBlank
-    @Size(max = 50)
-    @Email
+    @Size(max =10000)
     private String situation;
+
+    private String image;
     @ManyToOne
     Utilisateurs utilisateurs;
 }

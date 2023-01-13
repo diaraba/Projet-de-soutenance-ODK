@@ -63,7 +63,7 @@ public class EmailConstructor {
 		return messagePreparator;
 	}
 
-	public MimeMessagePreparator constructResetPasswordEmail(User user, String password) {
+	public MimeMessagePreparator constructUpdateUserProfileEmail(Utilisateurs user, String password) {
 		Context context = new Context();
 		context.setVariable("utilisateur", user);
 		context.setVariable("password", password);
@@ -82,7 +82,45 @@ public class EmailConstructor {
 		return messagePreparator;
 	}
 
-	public MimeMessagePreparator constructUpdateUserProfileEmail(User user) {
+	public MimeMessagePreparator constructResetPasswordEmail(Utilisateurs user) {
+		Context context = new Context();
+		context.setVariable("utilisateur", user);
+		String text = templateEngine.process("updateUserProfileEmailTemplate", context);
+		MimeMessagePreparator messagePreparator = new MimeMessagePreparator() {
+			@Override
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
+				email.setPriority(1);
+				email.setTo(user.getEmail());
+				email.setSubject("Profile Modifié - CogoYaSo");
+				email.setText(text, true);
+				email.setFrom(new InternetAddress(env.getProperty("support.email")));
+			}
+		};
+		return messagePreparator;
+	}
+
+
+
+	public MimeMessagePreparator constructStructureResetPasswordEmail(Structure user) {
+		Context context = new Context();
+		context.setVariable("utilisateur", user);
+		String text = templateEngine.process("updateUserProfileEmailTemplate", context);
+		MimeMessagePreparator messagePreparator = new MimeMessagePreparator() {
+			@Override
+			public void prepare(MimeMessage mimeMessage) throws Exception {
+				MimeMessageHelper email = new MimeMessageHelper(mimeMessage);
+				email.setPriority(1);
+				email.setTo(user.getEmail());
+				email.setSubject("Profile Modifié - CogoYaSo");
+				email.setText(text, true);
+				email.setFrom(new InternetAddress(env.getProperty("support.email")));
+			}
+		};
+		return messagePreparator;
+	}
+
+	public MimeMessagePreparator constructStructureUpdateUserProfileEmail(Structure user, String password) {
 		Context context = new Context();
 		context.setVariable("utilisateur", user);
 		String text = templateEngine.process("updateUserProfileEmailTemplate", context);

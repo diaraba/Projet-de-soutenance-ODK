@@ -24,7 +24,7 @@ public class Annonce {
     private String objet;
 
     @NotBlank
-
+    @Size(max =10000)
     private String contenu;
 
 

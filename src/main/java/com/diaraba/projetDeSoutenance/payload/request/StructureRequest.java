@@ -1,10 +1,15 @@
 package com.diaraba.projetDeSoutenance.payload.request;
 
+import com.diaraba.projetDeSoutenance.models.Activites;
+import lombok.Data;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-
+@Data
 public class StructureRequest {
     @NotBlank
     @Size(min = 3, max = 20)
@@ -19,6 +24,7 @@ public class StructureRequest {
 
     private Set<String> role;
 
+    private List<Activites> activites= new ArrayList<>();
 
     @NotBlank
     @Size(min = 6, max = 40)

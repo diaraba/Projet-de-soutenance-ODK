@@ -1,11 +1,14 @@
 package com.diaraba.projetDeSoutenance.models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
+@Data
 @Table(name = "profilestructure")
 public class ProfileStructure {
     @Id
@@ -13,23 +16,19 @@ public class ProfileStructure {
     private Long id;
 
     @NotBlank
-    @Size(max = 50)
     private String activite;
 
     @NotBlank
-    @Size(max = 50)
     private String localisation;
 
-    @NotBlank
-    @Size(max = 50)
+
     private String image;
 
     @NotBlank
-    @Size(max = 50)
+    @Size(max =10000)
     private String description;
 
     @NotBlank
-    @Size(max = 50)
     private String slogan;
     @NotBlank
     @Size(max = 50)

@@ -12,4 +12,8 @@ public interface UtilisateurService {
 ResponseEntity<?>  creerUtilisateur(Utilisateurs utilisateurs);
 Utilisateurs afficherUser(String utilisateur);
 
+
+    ResponseEntity<?> updateMotdepasse(Utilisateurs utilisateurs, String nouveaumotdepasse);
+
+    ResponseEntity<?> resetMotdepasse(Utilisateurs utilisateurs);
 }
