@@ -22,7 +22,6 @@ public class Utilisateurs extends User{
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;*/
 
-    @NotBlank
     @Size(max = 50)
     private String nomutilisateur;
     @ManyToMany(fetch = FetchType.LAZY)

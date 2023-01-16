@@ -207,27 +207,20 @@ public class AuthController {
 
 
 
-    @PutMapping("modifierUtilisateur")
+    @PutMapping("modifierUtilisateur/{id}")
     public ResponseEntity<?>  updateUtilisateur(@PathVariable Long id,@RequestBody SignupRequest signupRequest) {
         Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur(),new ArrayList<>());
 
 
 
-        if (utilisateurRepository.existsByNomutilisateur(signupRequest.getNomutilisateur())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: NomUtilisateur existe déjà!"));
-        }
 
-        else if (structureRepository.existsByEmail(signupRequest.getEmail())) {
+       if (structureRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use___________!"));
         }
 
-        else if (utilisateurRepository.existsByEmail(utilisateurs.getEmail())) {
-            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use*************!"));
-        }else{
+       else{
 
             Set<String> strRoles = signupRequest.getRole();
 
@@ -266,10 +259,32 @@ public class AuthController {
                     }
                 });
             }
-            utilisateurs.setActivitesU(signupRequest.getActivites());
-            utilisateurs.setRoles(roles);
-            utilisateurs.setEmail(signupRequest.getEmail());
-            utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
+            if (signupRequest.getEmail() != null && !signupRequest.getEmail().equals(utilisateurs.getEmail())) {
+                utilisateurs.setEmail(utilisateurRepository.findByIduser(id).getEmail());
+            }else{
+                utilisateurs.setEmail(signupRequest.getEmail());
+            }
+            if (signupRequest.getNomutilisateur() != null) {
+                utilisateurs.setNomutilisateur(signupRequest.getNomutilisateur());
+            }else{
+                utilisateurs.setNomutilisateur(utilisateurs.getNomutilisateur());
+            }
+            if (signupRequest.getActivites() != null) {
+                utilisateurs.setActivitesU(signupRequest.getActivites());
+            }else{
+                utilisateurs.setActivitesU(utilisateurs.getActivitesU());
+            }
+            if (signupRequest.getRole() != null) {
+                utilisateurs.setRoles(roles);
+            }else{
+                utilisateurs.setRoles(utilisateurs.getRoles());
+            }
+
+            if (signupRequest.getRole() != null) {
+                utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
+            }else{
+                utilisateurs.setPassword(utilisateurs.getPassword());
+            }
             return utilisateurService.updateUtilisateur(id,utilisateurs);
         }
     }

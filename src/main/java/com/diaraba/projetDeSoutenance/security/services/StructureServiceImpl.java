@@ -63,6 +63,8 @@ public class StructureServiceImpl implements StructureService{
     @Override
     public ResponseEntity<?> updateStructure(Long id, Structure structure) {
         structure.setIduser(id);
+
+
         structureRepository.save(structure);
         return ResponseEntity.ok(new MessageResponse("Structure modifier avec success!")) ;
     }
