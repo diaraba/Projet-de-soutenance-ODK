@@ -2,6 +2,8 @@ package com.diaraba.projetDeSoutenance.controllers;
 
 import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
+import com.diaraba.projetDeSoutenance.payload.response.SignupResponse1;
+import com.diaraba.projetDeSoutenance.payload.response.StructureResponse;
 import com.diaraba.projetDeSoutenance.repository.UtilisateurRepository;
 import com.diaraba.projetDeSoutenance.security.services.UtilisateurService;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +70,16 @@ public class UtlisateurController {
                 return new ResponseEntity<>("Error Occured: " + e.getMessage(), HttpStatus.BAD_REQUEST);
             }
         }
+
+
+    @GetMapping("/afficherAllUtilisateurs")
+    public SignupResponse1 afficherAllUtilisateurs(
+            @RequestParam(value = "pageNo", defaultValue = "0", required = false)int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "2", required = false)int pageSize)
+    {
+        return utilisateurService.afficherAllUtilisateurs(pageNo, pageSize);
+    }
+
     }
 
 

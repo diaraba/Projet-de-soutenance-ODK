@@ -5,4 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface ProfileUtilisateursService {
     ResponseEntity<?>creerProfileUtilisateurs(ProfileUtilisateurs profileUtilisateurs);
+    ResponseEntity<?>updateProfileUtilisateurs(Long id,ProfileUtilisateurs profileUtilisateurs);
 }

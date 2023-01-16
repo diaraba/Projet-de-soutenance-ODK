@@ -1,9 +1,6 @@
 package com.diaraba.projetDeSoutenance.controllers;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -19,6 +16,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -130,7 +128,7 @@ public class AuthController {
 
     @PostMapping("creerUtilisateur")
     public ResponseEntity<?>  ajouterUtilisateur(@RequestBody SignupRequest signupRequest) {
-        Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur());
+        Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur(),new ArrayList<>());
 
 
 
@@ -194,6 +192,89 @@ public class AuthController {
         return utilisateurService.creerUtilisateur(utilisateurs);
         }
     }
+
+
+    //Mise à jour d'une structure donnée****************************************
+
+
+
+
+
+
+
+
+
+
+
+
+    @PutMapping("modifierUtilisateur")
+    public ResponseEntity<?>  updateUtilisateur(@PathVariable Long id,@RequestBody SignupRequest signupRequest) {
+        Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur(),new ArrayList<>());
+
+
+
+        if (utilisateurRepository.existsByNomutilisateur(signupRequest.getNomutilisateur())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: NomUtilisateur existe déjà!"));
+        }
+
+        else if (structureRepository.existsByEmail(signupRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Error: Email is already in use___________!"));
+        }
+
+        else if (utilisateurRepository.existsByEmail(utilisateurs.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use*************!"));
+        }else{
+
+            Set<String> strRoles = signupRequest.getRole();
+
+            Set<Role> roles = new HashSet<>();
+
+
+            if (strRoles == null) {
+                Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(userRole);
+            } else {
+                strRoles.forEach(role -> {
+                    switch (role) {
+                        case "admin":
+                            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(adminRole);
+
+                            break;
+                        case "user":
+                            Role user = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(user);
+
+                            break;
+                        case "structure":
+                            Role structure = roleRepository.findByName(ERole.ROLE_STRUCTURE).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(structure);
+                            break;
+      /*  case "mod":
+          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+          roles.add(modRole);
+
+          break;*/
+                        default:
+                            Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(userRole);
+                    }
+                });
+            }
+            utilisateurs.setActivitesU(signupRequest.getActivites());
+            utilisateurs.setRoles(roles);
+            utilisateurs.setEmail(signupRequest.getEmail());
+            utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
+            return utilisateurService.updateUtilisateur(id,utilisateurs);
+        }
+    }
+
+
 
 
 
@@ -282,6 +363,80 @@ public class AuthController {
         structure.setRoles(roles);
         return structureService.creerStructure(structure);
     }
+    }
+
+
+
+    //Mise à jour d'une structure donnée****************************************
+
+
+
+    @PutMapping("modifierStructure/{id}")
+    public ResponseEntity<?> updateStructure(@PathVariable Long id, @RequestBody StructureRequest structureRequest) {
+        Structure structure = new Structure(structureRequest.getAlias());
+        structure.setEmail(structureRequest.getEmail());
+        structure.setActivites(structureRequest.getActivites());
+        structure.setPassword(encoder.encode(structureRequest.getPassword()));
+
+        System.out.println(structureRequest.getActivites());
+
+         if (utilisateurRepository.existsByEmail(structure.getEmail())) {
+            return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use*************!"));
+        }else {
+
+            Set<String> strStatuts = structureRequest.getStatut();
+
+            Set<Statut> statuts = new HashSet<>();
+
+
+            if (strStatuts == null) {
+                Statut userStatut = statutRepository.findByName(EStatut.Public).orElseThrow(() -> new RuntimeException("Error: Statut is not found."));
+                statuts.add(userStatut);
+            } else {
+                strStatuts.forEach(role -> {
+                    switch (role) {
+                        case "prive":
+                            Statut adminStatut = statutRepository.findByName(EStatut.Prive).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            statuts.add(adminStatut);
+
+                            break;
+      /*  case "mod":
+          Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+          roles.add(modRole);
+
+          break;*/
+                        case "public":
+                            Statut userStatut = statutRepository.findByName(EStatut.Public).orElseThrow(() -> new RuntimeException("Error: Statut is not found."));
+                            statuts.add(userStatut);
+                    }
+                });
+            }
+            structure.setStatuts(statuts);
+
+
+            Set<String> strRoles = structureRequest.getRole();
+
+            Set<Role> roles = new HashSet<>();
+
+
+            if (strRoles == null) {
+                Role StructureRole = roleRepository.findByName(ERole.ROLE_STRUCTURE).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                roles.add(StructureRole);
+            } else {
+                strRoles.forEach(role -> {
+                    switch (role) {
+                        case "structure":
+                            Role StructureRole = roleRepository.findByName(ERole.ROLE_STRUCTURE).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                            roles.add(StructureRole);
+
+                            break;
+                    }
+                });
+            }
+            structure.setRoles(roles);
+            return structureService.updateStructure(id,structure);
+        }
     }
 
 

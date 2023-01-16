@@ -15,6 +15,7 @@ public interface StructureRepository extends JpaRepository<Structure, Long> {
     Boolean existsByAlias(String alias);
 
     Boolean existsByEmail(String email);
+    Structure findByIduser(Long iduser);
 
 
 

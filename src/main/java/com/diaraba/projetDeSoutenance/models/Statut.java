@@ -1,8 +1,16 @@
 package com.diaraba.projetDeSoutenance.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 @Entity
 @Table(name = "statuts")
+@AllArgsConstructor
+@Getter
+@Setter
 public class Statut {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

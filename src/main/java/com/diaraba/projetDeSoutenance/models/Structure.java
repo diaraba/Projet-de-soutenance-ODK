@@ -1,6 +1,6 @@
 package com.diaraba.projetDeSoutenance.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 @Table(name = "Structure"
        /* ,uniqueConstraints = {
                 @UniqueConstraint(columnNames = "alias"),

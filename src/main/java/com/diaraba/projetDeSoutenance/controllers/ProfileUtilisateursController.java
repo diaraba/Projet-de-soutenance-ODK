@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -32,7 +30,7 @@ public class ProfileUtilisateursController {
                                                       @Param("genre") String genre,
                                                       @Param("numero") String numero,
                                                       @Param("situation") String situation,
-                                                      @Param("utilisateur") String utilisateur,
+                                                      @Param("utilisateur") Long utilisateur,
                                                       @Param("image") MultipartFile image ) throws IOException {
 
 
@@ -40,7 +38,7 @@ public class ProfileUtilisateursController {
 
         String img = StringUtils.cleanPath(image.getOriginalFilename());
 
-        String uploaDir = "C:\\Users\\didiarra\\Bureau\\Projet de soutenance\\src\\main\\resources\\assets\\image";
+        String uploaDir = "C:\\Users\\Ash Born\\Desktop\\Projet de soutenance\\src\\main\\resources\\assets\\image";
         ConfigImage.saveimg(uploaDir, img, image);
         profileUtilisateurs.setImage(img);
         profileUtilisateurs.setNom(nom);
@@ -48,9 +46,36 @@ public class ProfileUtilisateursController {
         profileUtilisateurs.setGenre(genre);
         profileUtilisateurs.setNumero(numero);
         profileUtilisateurs.setSituation(situation);
-        profileUtilisateurs.setUtilisateurs(utilisateurRepository.findByNomutilisateur(utilisateur));
+        profileUtilisateurs.setUtilisateurs(utilisateurRepository.findByIduser(utilisateur));
 
 
         return profileUtilisateursService.creerProfileUtilisateurs(profileUtilisateurs);
+    }
+    @PutMapping("/modifierProfileStructure/{id}")
+    public ResponseEntity<?> update(@PathVariable Long id,@Param("nom") String nom,
+                                    @Param("prenom") String prenom,
+                                    @Param("genre") String genre,
+                                    @Param("numero") String numero,
+                                    @Param("situation") String situation,
+                                    @Param("utilisateur") Long utilisateur,
+                                    @Param("image") MultipartFile image ) throws IOException {
+
+
+        ProfileUtilisateurs profileUtilisateurs=new ProfileUtilisateurs();
+
+        String img = StringUtils.cleanPath(image.getOriginalFilename());
+
+        String uploaDir = "C:\\Users\\Ash Born\\Desktop\\Projet de soutenance\\src\\main\\resources\\assets\\image";
+        ConfigImage.saveimg(uploaDir, img, image);
+        profileUtilisateurs.setImage(img);
+        profileUtilisateurs.setNom(nom);
+        profileUtilisateurs.setPrenom(prenom);
+        profileUtilisateurs.setGenre(genre);
+        profileUtilisateurs.setNumero(numero);
+        profileUtilisateurs.setSituation(situation);
+        profileUtilisateurs.setUtilisateurs(utilisateurRepository.findByIduser(utilisateur));
+
+
+        return profileUtilisateursService.updateProfileUtilisateurs(id,profileUtilisateurs);
     }
 }

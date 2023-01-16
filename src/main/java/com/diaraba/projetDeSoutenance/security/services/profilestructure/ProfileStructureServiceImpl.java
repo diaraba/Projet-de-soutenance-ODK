@@ -16,4 +16,11 @@ public class ProfileStructureServiceImpl implements ProfileStructureService{
         profileStructureRepository.save(profileStructure);
         return ResponseEntity.ok(new MessageResponse("Profile structure enregistrer avec success!")) ;
     }
+
+    @Override
+    public ResponseEntity<?> updateProfileStructure(Long id,ProfileStructure profileStructure) {
+        profileStructure.setId(id);
+         profileStructureRepository.save(profileStructure);
+        return ResponseEntity.ok(new MessageResponse("Profile structure modifier avec success!")) ;
+    }
 }

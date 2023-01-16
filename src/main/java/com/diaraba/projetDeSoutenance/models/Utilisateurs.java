@@ -1,6 +1,6 @@
 package com.diaraba.projetDeSoutenance.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,8 +12,11 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "utilisateur")
-@Data
+@Table(name = "utilisateurs")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Utilisateurs extends User{
     /*    @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,17 +27,17 @@ public class Utilisateurs extends User{
     private String nomutilisateur;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "utilisateurs_activite",
-            joinColumns = @JoinColumn(name="id_structure"),
+            joinColumns = @JoinColumn(name="id_utilisateurs"),
             inverseJoinColumns = @JoinColumn(name = "id_activite"))
     private List<Activites> activitesU= new ArrayList<>();
 
 
-    public Utilisateurs() {
+   /* public Utilisateurs() {
     }
 
     public Utilisateurs(String nomutilisateur) {
         this.nomutilisateur = nomutilisateur;
-    }
+    }*/
 
        /* public Long getId() {
                 return id;

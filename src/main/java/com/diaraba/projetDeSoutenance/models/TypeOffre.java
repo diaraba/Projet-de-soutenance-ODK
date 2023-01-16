@@ -1,13 +1,16 @@
 package com.diaraba.projetDeSoutenance.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Table(name = "typeoffre")
 public class TypeOffre {
     @Id

@@ -1,6 +1,9 @@
 package com.diaraba.projetDeSoutenance.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,11 +22,13 @@ import javax.validation.constraints.Size;
           @UniqueConstraint(columnNames = "email")
     }*/)
 @AllArgsConstructor
+@Getter
+@Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long iduser;
 
 /*  @NotBlank
   @Size(max = 20)
@@ -55,12 +60,12 @@ public class User {
     this.password = password;
   }
 
-  public Long getId() {
-    return id;
+  public Long getIduser() {
+    return iduser;
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void setIduser(Long iduser) {
+    this.iduser = iduser;
   }
 
   /*public String getUsername() {

@@ -1,6 +1,7 @@
 package com.diaraba.projetDeSoutenance.models;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +10,10 @@ import java.util.*;
 
 @Entity
 @Table(name = "activites")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Activites {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +22,10 @@ public class Activites {
     @NotBlank
     @Size(max = 50)
     private String nom;
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "activites")
     private List<Structure> structures= new ArrayList<>();
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "activitesU")
     private List<Utilisateurs> utilisateurs= new ArrayList<>();
 }

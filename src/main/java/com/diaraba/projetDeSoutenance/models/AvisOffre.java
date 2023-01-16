@@ -1,6 +1,6 @@
 package com.diaraba.projetDeSoutenance.models;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -10,7 +10,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "avisoffre")
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class AvisOffre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

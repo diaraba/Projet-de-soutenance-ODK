@@ -19,4 +19,10 @@ public class ProfileUtilisateursServiceImpl implements ProfileUtilisateursServic
         profileUtilisateurRepository.save(profileUtilisateurs);
         return ResponseEntity.ok(new MessageResponse("Profile utilisateur enregistrer avec success!"));
     }
+
+    @Override
+    public ResponseEntity<?> updateProfileUtilisateurs(Long id, ProfileUtilisateurs profileUtilisateurs) {
+        profileUtilisateurs.setId(id);
+        profileUtilisateurRepository.save(profileUtilisateurs);
+        return ResponseEntity.ok(new MessageResponse("Profile utilisateur modifier avec success!"));    }
 }
