@@ -22,7 +22,7 @@ public class ProfileUtilisateursServiceImpl implements ProfileUtilisateursServic
 
     @Override
     public ResponseEntity<?> updateProfileUtilisateurs(Long id, ProfileUtilisateurs profileUtilisateurs) {
-        profileUtilisateurs.setId(id);
+        profileUtilisateurs.setIdutilisateur(id);
         profileUtilisateurRepository.save(profileUtilisateurs);
         return ResponseEntity.ok(new MessageResponse("Profile utilisateur modifier avec success!"));    }
 }

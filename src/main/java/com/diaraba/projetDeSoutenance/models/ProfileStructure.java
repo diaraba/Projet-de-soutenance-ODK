@@ -18,8 +18,13 @@ public class ProfileStructure {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @Size(max =100)
+    private String nom;
+
     @NotBlank
     private String activite;
+
 
     @NotBlank
     private String localisation;

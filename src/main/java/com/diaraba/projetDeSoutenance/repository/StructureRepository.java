@@ -1,13 +1,13 @@
 package com.diaraba.projetDeSoutenance.repository;
 
-import com.diaraba.projetDeSoutenance.models.EStatut;
-import com.diaraba.projetDeSoutenance.models.Structure;
-import com.diaraba.projetDeSoutenance.models.User;
-import com.diaraba.projetDeSoutenance.models.Utilisateurs;
+import com.diaraba.projetDeSoutenance.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 @Repository
 public interface StructureRepository extends JpaRepository<Structure, Long> {
   Structure findByAlias(String alias);
@@ -16,6 +16,8 @@ public interface StructureRepository extends JpaRepository<Structure, Long> {
 
     Boolean existsByEmail(String email);
     Structure findByIduser(Long iduser);
+
+    //List<Structure> findByStatuts(Set<Statut> statuts);
 
 
 

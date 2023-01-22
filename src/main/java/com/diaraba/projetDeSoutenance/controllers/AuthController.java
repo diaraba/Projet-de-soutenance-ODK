@@ -10,6 +10,9 @@ import com.diaraba.projetDeSoutenance.payload.request.StructureRequest;
 import com.diaraba.projetDeSoutenance.repository.*;
 import com.diaraba.projetDeSoutenance.security.services.StructureService;
 import com.diaraba.projetDeSoutenance.security.services.UtilisateurService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +29,8 @@ import com.diaraba.projetDeSoutenance.payload.response.JwtResponse;
 import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
 import com.diaraba.projetDeSoutenance.security.jwt.JwtUtils;
 import com.diaraba.projetDeSoutenance.security.services.UserDetailsImpl;
+
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -127,7 +132,7 @@ public class AuthController {
   }*/
 
     @PostMapping("creerUtilisateur")
-    public ResponseEntity<?>  ajouterUtilisateur(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?>  ajouterUtilisateur(@RequestBody SignupRequest signupRequest) throws JsonProcessingException {
         Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur(),new ArrayList<>());
 
 
@@ -154,7 +159,7 @@ public class AuthController {
 
 
         if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+            Role userRole = roleRepository.findByName(ERole.ROLE_EMPLOI).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
         } else {
             strRoles.forEach(role -> {
@@ -164,10 +169,14 @@ public class AuthController {
                         roles.add(adminRole);
 
                         break;
-                    case "user":
-                        Role user = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    case "emploi":
+                        Role user = roleRepository.findByName(ERole.ROLE_EMPLOI).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(user);
 
+                        break;
+                    case "projet":
+                        Role user1 = roleRepository.findByName(ERole.ROLE_PROJET).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(user1);
                         break;
                     case "structure":
                         Role structure = roleRepository.findByName(ERole.ROLE_STRUCTURE).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -185,10 +194,21 @@ public class AuthController {
                 }
             });
         }
+
+
+            String activitesString = signupRequest.getActivites().toString();
+            Gson gson = new Gson();
+
+            //Activites[] activites = gson.fromJson(activitesString,Activites[].class);
+
+            //signupRequest.setActivites(Arrays.asList(activites));
+
         utilisateurs.setActivitesU(signupRequest.getActivites());
+        System.out.println(signupRequest.getRole());
         utilisateurs.setRoles(roles);
         utilisateurs.setEmail(signupRequest.getEmail());
         utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
+
         return utilisateurService.creerUtilisateur(utilisateurs);
         }
     }
@@ -259,32 +279,31 @@ public class AuthController {
                     }
                 });
             }
-            if (signupRequest.getEmail() != null && !signupRequest.getEmail().equals(utilisateurs.getEmail())) {
+            if (signupRequest.getEmail() == null|| signupRequest.getEmail().trim().isEmpty()) {
                 utilisateurs.setEmail(utilisateurRepository.findByIduser(id).getEmail());
             }else{
                 utilisateurs.setEmail(signupRequest.getEmail());
             }
-            if (signupRequest.getNomutilisateur() != null) {
+            if (signupRequest.getNomutilisateur() == null || signupRequest.getNomutilisateur().trim().isEmpty()) {
+                utilisateurs.setNomutilisateur(utilisateurRepository.findByIduser(id).getNomutilisateur());
+            }else{
                 utilisateurs.setNomutilisateur(signupRequest.getNomutilisateur());
-            }else{
-                utilisateurs.setNomutilisateur(utilisateurs.getNomutilisateur());
             }
-            if (signupRequest.getActivites() != null) {
+            if (signupRequest.getActivites() == null) {
+                utilisateurs.setActivitesU(utilisateurRepository.findByIduser(id).getActivitesU());
+            }else{
                 utilisateurs.setActivitesU(signupRequest.getActivites());
-            }else{
-                utilisateurs.setActivitesU(utilisateurs.getActivitesU());
             }
-            if (signupRequest.getRole() != null) {
-                utilisateurs.setRoles(roles);
+            if (signupRequest.getRole() == null || signupRequest.getRole().isEmpty()) {
+                utilisateurs.setRoles(utilisateurRepository.findByIduser(id).getRoles());
             }else{
-                utilisateurs.setRoles(utilisateurs.getRoles());
+                utilisateurs.setRoles(roles);
             }
 
-            if (signupRequest.getRole() != null) {
-                utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
-            }else{
-                utilisateurs.setPassword(utilisateurs.getPassword());
-            }
+           if (signupRequest.getRole() == null || signupRequest.getRole().isEmpty()) {
+               utilisateurs.setPassword(encoder.encode(utilisateurRepository.findByIduser(id).getPassword()));
+           }
+
             return utilisateurService.updateUtilisateur(id,utilisateurs);
         }
     }
@@ -367,6 +386,14 @@ public class AuthController {
         } else {
             strRoles.forEach(role -> {
                 switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(adminRole);
+
+                        break;
+                    case "user":
+                        Role user = roleRepository.findByName(ERole.ROLE_USER).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                        roles.add(user);
                     case "structure":
                         Role StructureRole = roleRepository.findByName(ERole.ROLE_STRUCTURE).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                         roles.add(StructureRole);
