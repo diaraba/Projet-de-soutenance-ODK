@@ -10,6 +10,9 @@ import com.diaraba.projetDeSoutenance.payload.request.StructureRequest;
 import com.diaraba.projetDeSoutenance.repository.*;
 import com.diaraba.projetDeSoutenance.security.services.StructureService;
 import com.diaraba.projetDeSoutenance.security.services.UtilisateurService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +29,8 @@ import com.diaraba.projetDeSoutenance.payload.response.JwtResponse;
 import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
 import com.diaraba.projetDeSoutenance.security.jwt.JwtUtils;
 import com.diaraba.projetDeSoutenance.security.services.UserDetailsImpl;
+
+import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -127,7 +132,7 @@ public class AuthController {
   }*/
 
     @PostMapping("creerUtilisateur")
-    public ResponseEntity<?>  ajouterUtilisateur(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?>  ajouterUtilisateur(@RequestBody SignupRequest signupRequest) throws JsonProcessingException {
         Utilisateurs utilisateurs = new Utilisateurs(signupRequest.getNomutilisateur(),new ArrayList<>());
 
 
@@ -185,10 +190,20 @@ public class AuthController {
                 }
             });
         }
+
+
+            String activitesString = signupRequest.getActivites().toString();
+            Gson gson = new Gson();
+
+            //Activites[] activites = gson.fromJson(activitesString,Activites[].class);
+
+            //signupRequest.setActivites(Arrays.asList(activites));
+
         utilisateurs.setActivitesU(signupRequest.getActivites());
         utilisateurs.setRoles(roles);
         utilisateurs.setEmail(signupRequest.getEmail());
         utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
+
         return utilisateurService.creerUtilisateur(utilisateurs);
         }
     }

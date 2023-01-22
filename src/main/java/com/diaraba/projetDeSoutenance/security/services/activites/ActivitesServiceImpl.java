@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ActivitesServiceImpl implements ActivitesService{
     @Autowired
@@ -17,5 +19,10 @@ public class ActivitesServiceImpl implements ActivitesService{
 
         activitesRepository.save(activite);
         return ResponseEntity.ok(new MessageResponse("User enregistrer avec success!")) ;
+    }
+
+    @Override
+    public List<Activites> getAll() {
+        return activitesRepository.findAll();
     }
 }

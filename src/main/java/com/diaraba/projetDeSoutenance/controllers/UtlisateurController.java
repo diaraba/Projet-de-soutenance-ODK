@@ -1,9 +1,11 @@
 package com.diaraba.projetDeSoutenance.controllers;
 
+import com.diaraba.projetDeSoutenance.models.Activites;
 import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
 import com.diaraba.projetDeSoutenance.payload.response.SignupResponse1;
 import com.diaraba.projetDeSoutenance.payload.response.StructureResponse;
+import com.diaraba.projetDeSoutenance.repository.ActivitesRepository;
 import com.diaraba.projetDeSoutenance.repository.UtilisateurRepository;
 import com.diaraba.projetDeSoutenance.security.services.UtilisateurService;
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/utilisateur")
@@ -24,7 +27,10 @@ public class UtlisateurController {
     @Autowired
     UtilisateurRepository utilisateurRepository;
     @Autowired
+    ActivitesRepository activitesRepository;
+    @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @GetMapping("afficherUtilisateur/{nomutilisateur}")
     public Utilisateurs afficherutilisateur(@PathVariable("nomutilisateur")String nomutilisateur){
@@ -79,7 +85,10 @@ public class UtlisateurController {
     {
         return utilisateurService.afficherAllUtilisateurs(pageNo, pageSize);
     }
-
+    @GetMapping("afficherpreference")
+    public List<Activites> getAllPreference(){
+        return activitesRepository.findAll();
+    }
     }
 
 
