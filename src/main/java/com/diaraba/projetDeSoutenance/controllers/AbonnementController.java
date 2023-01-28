@@ -12,15 +12,12 @@ import com.diaraba.projetDeSoutenance.security.services.abonnement.AbonnementSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
 public class AbonnementController {
@@ -34,18 +31,20 @@ public class AbonnementController {
     AbonnementService abonnementService;
     @Autowired
     AbonnementRepository abonnementRepository;
-    @PostMapping("/ajouterAbonnement")
-    public ResponseEntity<?> ajouterAbonnement(@Param("user") Long user,
-                                               @Param("structure") Long structure){
+    @PostMapping("/ajouterAbonnement/{user}/{structure}")
+    public ResponseEntity<?> ajouterAbonnement(@PathVariable Long user,
+                                               @PathVariable Long structure){
 
-    Abonnement abonnement=new Abonnement();
+            Abonnement abonnement=new Abonnement();
+            System.out.println(user+"cmlz,vlknvefklvnelkvnelkvn efljkvlrznvkflvfkdk");
 
             abonnement.setUtilisateurs(utilisateurRepository.findByIduser(user));
+            //System.out.println(abonnement.getUtilisateurs().getNomutilisateur()+"dkjfbcdkjbjkfdnckfjvbfkjvfbkfjvf");
             abonnement.setStructure(structureRepository.findByIduser(structure));
         return abonnementService.creerAbonnement(abonnement);
     }
-    @GetMapping("/afficherabonnement")
-    public List<Abonnement> afficher(@Param("user") Long user){
+    @GetMapping("/afficherabonnement/{user}")
+    public List<Abonnement> afficher(@PathVariable Long user){
         Utilisateurs utilisateurs=utilisateurRepository.findByIduser(user);
         System.out.println(utilisateurs+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         List<Abonnement> list= abonnementRepository.findByUtilisateurs(utilisateurs);
@@ -58,8 +57,8 @@ public class AbonnementController {
        return  list;
     }
 
-    @GetMapping("/afficherabonner")
-    public List<Abonnement> afficherabonner(@Param("structure") Long structure){
+    @GetMapping("/afficherabonner/{structure}")
+    public List<Abonnement> afficherabonner(@PathVariable Long structure){
         Structure structure1=structureRepository.findByIduser(structure);
         System.out.println(structure1+"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         List<Abonnement> list= abonnementRepository.findByStructure(structure1);
@@ -71,8 +70,8 @@ public class AbonnementController {
         }
         return  list;
     }
-    @GetMapping("/afficherpreference")
-    public List<Structure> afficherpreference(@Param("user") Long user){
+    @GetMapping("/afficherpreference/{user}")
+    public List<Structure> afficherpreference(@PathVariable Long user){
         Utilisateurs utilisateurs=utilisateurRepository.findByIduser(user);
         System.out.println(utilisateurs+"11111111111111111111111111");
         List<Activites> listActivites= utilisateurs.getActivitesU();
@@ -84,6 +83,7 @@ public class AbonnementController {
 
             System.out.println(listActivites);
         }
+        System.out.println(listStructure);
         return  listStructure;
     }
 }

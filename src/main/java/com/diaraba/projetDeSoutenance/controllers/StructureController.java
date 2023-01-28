@@ -60,4 +60,5 @@ public class StructureController {
     {
         return structureService.afficherAllStructure(pageNo,pageSize);
     }
+
 }

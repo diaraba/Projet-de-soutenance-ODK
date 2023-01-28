@@ -26,7 +26,7 @@ public class AvisOffreServiceImpl implements AvisOffreService {
 
     private AvisOffreRequest mapToDTO(AvisOffre avisOffre){
         AvisOffreRequest avisOffreRequest=new AvisOffreRequest();
-        avisOffreRequest.setId(avisOffre.getId());
+        avisOffreRequest.setId(avisOffre.getIdavisoffre());
         avisOffreRequest.setDate(avisOffre.getDate());
         avisOffreRequest.setCible(avisOffre.getCible());
         avisOffreRequest.setTitre(avisOffre.getTitre());
@@ -36,15 +36,15 @@ public class AvisOffreServiceImpl implements AvisOffreService {
         return avisOffreRequest;
     }
     @Override
-    public ResponseEntity<?> creerAvisOffre(AvisOffre avisOffre) {
+    public AvisOffre creerAvisOffre(AvisOffre avisOffre) {
 
-        avisOffreRepository.save(avisOffre);
-        return ResponseEntity.ok(new MessageResponse("AvisOffre créer avec success!"));
+
+        return avisOffreRepository.save(avisOffre);
     }
 
     @Override
     public ResponseEntity<?> updateAvisOffre(Long id, AvisOffre avisOffre) {
-        avisOffre.setId(id);
+        avisOffre.setIdavisoffre(id);
         return ResponseEntity.ok(new MessageResponse("AvisOffre modifier avec success!"));
     }
 

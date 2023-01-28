@@ -1,11 +1,13 @@
 package com.diaraba.projetDeSoutenance.controllers;
 
 import com.diaraba.projetDeSoutenance.models.Activites;
+import com.diaraba.projetDeSoutenance.models.Structure;
 import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
 import com.diaraba.projetDeSoutenance.payload.response.SignupResponse1;
 import com.diaraba.projetDeSoutenance.payload.response.StructureResponse;
 import com.diaraba.projetDeSoutenance.repository.ActivitesRepository;
+import com.diaraba.projetDeSoutenance.repository.StructureRepository;
 import com.diaraba.projetDeSoutenance.repository.UtilisateurRepository;
 import com.diaraba.projetDeSoutenance.security.services.UtilisateurService;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +32,8 @@ public class UtlisateurController {
     ActivitesRepository activitesRepository;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    StructureRepository structureRepository;
 
 
     @GetMapping("afficherUtilisateur/{nomutilisateur}")
@@ -94,6 +98,10 @@ public class UtlisateurController {
     @GetMapping("afficherutilisateurparid/{id}")
     public Utilisateurs afficherutilisateurparid(@PathVariable Long id){
         return utilisateurRepository.findByIduser(id);
+    }
+    @GetMapping("afficherstructureparid/{id}")
+    public Structure afficherstructureparid(@PathVariable Long id){
+        return structureRepository.findByIduser(id);
     }
 }
 

@@ -1,39 +1,29 @@
 package com.diaraba.projetDeSoutenance.models;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.Date;
-
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "annonce")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Annonce {
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idannonce;
+    private Long idnotification;
 
-    @NotBlank
-    private String titre;
-
-    @NotBlank
-    private String objet;
-
-    @NotBlank
     @Size(max =10000)
     private String contenu;
 
 
-    private String image;
-
-    private Date date;
-    @ManyToOne
-    Structure structure;
 }

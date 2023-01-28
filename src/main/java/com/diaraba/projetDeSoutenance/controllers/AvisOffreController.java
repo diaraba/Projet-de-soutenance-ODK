@@ -3,7 +3,8 @@ package com.diaraba.projetDeSoutenance.controllers;
 
 import com.diaraba.projetDeSoutenance.models.*;
 import com.diaraba.projetDeSoutenance.payload.response.AvisOffreResponse;
-import com.diaraba.projetDeSoutenance.repository.StructureRepository;
+import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
+import com.diaraba.projetDeSoutenance.repository.*;
 import com.diaraba.projetDeSoutenance.security.services.StructureService;
 import com.diaraba.projetDeSoutenance.security.services.avisOffre.AvisOffreService;
 import com.diaraba.projetDeSoutenance.security.services.typeOffre.TypeOffreService;
@@ -17,7 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
-
+import static com.diaraba.projetDeSoutenance.utilis.constants.IMAGE_PATH;
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/avisoffre")
 public class AvisOffreController {
@@ -30,13 +32,21 @@ public class AvisOffreController {
     StructureService structureService;
     @Autowired
     TypeOffreService typeOffreService;
+    @Autowired
+    AvisOffreRepository avisOffreRepository;
+    @Autowired
+    private AbonnementRepository abonnementRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
 
-    @PostMapping("/creerAvisoffre")
-    public ResponseEntity<?> creerAvisoffre(@Param("titre") String titre,
+    @PostMapping("/creerAvisoffre/{structure}")
+    public ResponseEntity<?> creerAvisoffre(@PathVariable Long structure,
+                                            @Param("titre") String titre,
                                             @Param("description") String description,
                                             @Param("cible") String cible,
                                             @Param("conditions") String conditions,
-                                            @Param("structure") String structure,
                                             @Param("typeOffre") String typeOffre,
                                             @Param("image") MultipartFile image) throws IOException {
 
@@ -47,7 +57,7 @@ public class AvisOffreController {
        typeOffre1=typeOffreService.trouverTypeOffreParNom(typeOffre);
 
 
-      structure1=structureService.trouverStructureparalias(structure);
+      structure1=structureRepository.findByIduser(structure);
         AvisOffre avis= new AvisOffre();
         avis.setCible(cible);
         avis.setDate(new Date());
@@ -60,9 +70,21 @@ System.out.println(structure1);
 System.out.println(typeOffre1);
         String img = StringUtils.cleanPath(image.getOriginalFilename());
         avis.setImage(img);
-        String uploaDir = "C:\\Users\\Ash Born\\Desktop\\Projet de soutenance\\src\\main\\resources\\assets\\image";
+        String uploaDir = IMAGE_PATH;
         ConfigImage.saveimg(uploaDir, img, image);
-        return avisOffreService.creerAvisOffre(avis);
+        avis = avisOffreService.creerAvisOffre(avis);
+        //Notification
+        Notification notification = new Notification();
+        notification.setContenu(" Cher utilisateur votre structure " + structure1.getAlias()+ " vient de d'ajouter un nouvel avis " + avis.getTypeOffre());
+        Notification notification1= notificationRepository.save(notification);
+
+        for (Abonnement abonnement :
+                abonnementRepository.findByStructure(structure1)) {
+            System.out.println(abonnement+"abonnementttttttttttttttttttttttt");
+            abonnement.getUtilisateurs().getNotifications().add(notification1);
+            utilisateurRepository.save(abonnement.getUtilisateurs());
+        }
+        return ResponseEntity.ok(new MessageResponse("AvisOffre créer avec success!"));
     }
 
     @PutMapping("/modifierAvisOffre/{id}")
@@ -95,7 +117,7 @@ System.out.println(typeOffre1);
         System.out.println(typeOffre1);
         String img = StringUtils.cleanPath(image.getOriginalFilename());
         avis.setImage(img);
-        String uploaDir = "C:\\Users\\Ash Born\\Desktop\\Projet de soutenance\\src\\main\\resources\\assets\\image";
+        String uploaDir = IMAGE_PATH;
         ConfigImage.saveimg(uploaDir, img, image);
         return avisOffreService.updateAvisOffre(id,avis);
     }
@@ -113,5 +135,16 @@ System.out.println(typeOffre1);
             @RequestParam(value = "pageSize", defaultValue = "2", required = false)int pageSize)
     {
         return avisOffreService.afficherAllAvisOffre(pageNo,pageSize);
+    }
+    @GetMapping("afficheravisparidstructure/{id}")
+    public List<AvisOffre> afficheravisparidstructure(@PathVariable Long id){
+        Structure structure= new Structure();
+        structure=structureRepository.findByIduser(id);
+        return avisOffreRepository.findByStructure(structure);
+    }
+    @GetMapping("afficheravisoffreparid/{id}")
+    public AvisOffre afficheravisoffreparid(@PathVariable Long id)
+    {
+        return avisOffreRepository.findByIdavisoffre(id);
     }
 }

@@ -25,7 +25,7 @@ public class AnnonceServiceImpl implements  AnnonceService{
 
     private AnnonceRequest mapToDTO(Annonce annonce){
         AnnonceRequest annonceRequest=new AnnonceRequest();
-        annonceRequest.setId(annonce.getId());
+        annonceRequest.setId(annonce.getIdannonce());
         annonceRequest.setDate(annonce.getDate());
         annonceRequest.setTitre(annonce.getTitre());
         annonceRequest.setContenu(annonce.getContenu());
@@ -41,7 +41,7 @@ public class AnnonceServiceImpl implements  AnnonceService{
 
     @Override
     public ResponseEntity<?> updateAnnonce(Long id, Annonce annonce) {
-        annonce.setId(id);
+        annonce.setIdannonce(id);
         annonceRepository.save(annonce);
         return  ResponseEntity.ok(new MessageResponse("Annonce modifier avec success!"));
 

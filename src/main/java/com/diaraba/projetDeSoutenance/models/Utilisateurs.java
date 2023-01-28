@@ -30,6 +30,13 @@ public class Utilisateurs extends User{
             inverseJoinColumns = @JoinColumn(name = "id_activite"))
     private List<Activites> activitesU= new ArrayList<>();
 
+    @ManyToMany
+    List<Notification> notifications = new ArrayList<>();
+
+    public  Utilisateurs(String nomutilisateur, List<Activites> activite) {
+        this.nomutilisateur=nomutilisateur;
+        this.activitesU=activite;
+    }
 
    /* public Utilisateurs() {
     }

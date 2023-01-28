@@ -17,7 +17,7 @@ import java.util.Date;
 public class AvisOffre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idavisoffre;
 
     @NotBlank
     private String titre;
