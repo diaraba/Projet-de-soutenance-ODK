@@ -147,4 +147,6 @@ System.out.println(typeOffre1);
     {
         return avisOffreRepository.findByIdavisoffre(id);
     }
+
+
 }

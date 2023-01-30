@@ -37,7 +37,8 @@ public class ProfileUtilisateursController {
                                                       @Param("prenom") String prenom,
                                                       @Param("genre") String genre,
                                                       @Param("numero") String numero,
-                                                      @Param("situation") String situation
+                                                      @Param("situation") String situation,
+                                                      @Param("etat") String etat
                                                        ) throws IOException {
 
 
@@ -54,6 +55,7 @@ public class ProfileUtilisateursController {
         profileUtilisateurs.setNom(nom);
         profileUtilisateurs.setPrenom(prenom);
         profileUtilisateurs.setGenre(genre);
+        profileUtilisateurs.setEtat(etat);
         profileUtilisateurs.setNumero(numero);
         profileUtilisateurs.setSituation(situation);
         profileUtilisateurs.setUtilisateurs(utilisateurRepository.findByIduser(utilisateur));
@@ -67,7 +69,8 @@ public class ProfileUtilisateursController {
                                     @Param("prenom") String prenom,
                                     @Param("genre") String genre,
                                     @Param("numero") String numero,
-                                    @Param("situation") String situation
+                                    @Param("situation") String situation,
+                                    @Param("etat") String etat
 
                                     ) throws IOException {
 
@@ -124,6 +127,12 @@ public class ProfileUtilisateursController {
             currentprofile.setNumero(profileUtilisateurs.getNumero());
         }else {
             currentprofile.setNumero(numero);
+        }
+
+        if(etat== null) {
+            currentprofile.setEtat(profileUtilisateurs.getEtat());
+        }else {
+            currentprofile.setEtat(etat);
         }
 
         currentprofile.setUtilisateurs(profileUtilisateurs.getUtilisateurs());

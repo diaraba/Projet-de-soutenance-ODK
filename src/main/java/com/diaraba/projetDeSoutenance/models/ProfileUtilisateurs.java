@@ -27,6 +27,7 @@ public class ProfileUtilisateurs {
 
     private String genre;
 
+    private String etat;
 
     private String numero;
 
