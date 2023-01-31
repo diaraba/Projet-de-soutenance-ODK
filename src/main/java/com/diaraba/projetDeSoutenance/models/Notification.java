@@ -25,5 +25,11 @@ public class Notification {
     @Size(max =10000)
     private String contenu;
 
+    private String titre;
+
+    private String status;
+
+    private String etat;
+
 
 }

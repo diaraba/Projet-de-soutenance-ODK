@@ -75,13 +75,17 @@ System.out.println(typeOffre1);
         avis = avisOffreService.creerAvisOffre(avis);
         //Notification
         Notification notification = new Notification();
-        notification.setContenu(" Cher utilisateur votre structure " + structure1.getAlias()+ " vient de d'ajouter un nouvel avis " + avis.getTypeOffre());
+        notification.setStatus("false");
+        notification.setEtat("false");
+        notification.setTitre(structure1.getAlias());
+        notification.setContenu(" Cher utilisateur votre structure " + structure1.getAlias()+ " vient de d'ajouter un nouvel avis de " + typeOffre);
         Notification notification1= notificationRepository.save(notification);
 
         for (Abonnement abonnement :
                 abonnementRepository.findByStructure(structure1)) {
             System.out.println(abonnement+"abonnementttttttttttttttttttttttt");
             abonnement.getUtilisateurs().getNotifications().add(notification1);
+
             utilisateurRepository.save(abonnement.getUtilisateurs());
         }
         return ResponseEntity.ok(new MessageResponse("AvisOffre créer avec success!"));

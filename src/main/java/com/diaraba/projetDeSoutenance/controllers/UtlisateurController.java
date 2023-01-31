@@ -1,6 +1,7 @@
 package com.diaraba.projetDeSoutenance.controllers;
 
 import com.diaraba.projetDeSoutenance.models.Activites;
+import com.diaraba.projetDeSoutenance.models.Notification;
 import com.diaraba.projetDeSoutenance.models.Structure;
 import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
@@ -103,6 +104,8 @@ public class UtlisateurController {
     public Structure afficherstructureparid(@PathVariable Long id){
         return structureRepository.findByIduser(id);
     }
+
+
 }
 
 
