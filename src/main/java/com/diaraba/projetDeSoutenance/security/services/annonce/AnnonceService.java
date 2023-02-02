@@ -6,7 +6,7 @@ import com.diaraba.projetDeSoutenance.payload.response.AvisOffreResponse;
 import org.springframework.http.ResponseEntity;
 
 public interface AnnonceService {
-    ResponseEntity<?> creerAnnonce(Annonce annonce);
+    Annonce creerAnnonce(Annonce annonce);
     ResponseEntity<?> updateAnnonce(Long id,Annonce annonce);
 
     AnnonceResponse afficherAnnonce(int pageNo, int pageSize);

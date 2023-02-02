@@ -34,9 +34,9 @@ public class AnnonceServiceImpl implements  AnnonceService{
         return annonceRequest;
     }
     @Override
-    public ResponseEntity<?> creerAnnonce(Annonce annonce) {
-        annonceRepository.save(annonce);
-        return  ResponseEntity.ok(new MessageResponse("Annonce enregistrer avec success!"));
+    public Annonce creerAnnonce(Annonce annonce) {
+
+        return  annonceRepository.save(annonce);
     }
 
     @Override

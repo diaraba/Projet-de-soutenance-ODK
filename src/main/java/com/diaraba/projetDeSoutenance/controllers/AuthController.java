@@ -300,9 +300,15 @@ public class AuthController {
                 utilisateurs.setRoles(roles);
             }
 
+           if (signupRequest.getPassword() == null || signupRequest.getPassword().isEmpty()) {
+               utilisateurs.setPassword(encoder.encode(utilisateurRepository.findByIduser(id).getPassword()));
+           }else{
+               utilisateurs.setPassword(encoder.encode(signupRequest.getPassword()));
+           }
            if (signupRequest.getRole() == null || signupRequest.getRole().isEmpty()) {
                utilisateurs.setPassword(encoder.encode(utilisateurRepository.findByIduser(id).getPassword()));
            }
+
 
             return utilisateurService.updateUtilisateur(id,utilisateurs);
         }

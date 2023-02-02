@@ -60,7 +60,7 @@ public class UtilisateurServiceImpl implements  UtilisateurService {
     public ResponseEntity<?>  creerUtilisateur(Utilisateurs utilisateurs) {
 
         utilisateurRepository.save(utilisateurs);
-        //mailSender.send(emailConstructor.constructNewUserEmail(utilisateurs));
+        mailSender.send(emailConstructor.constructNewUserEmail(utilisateurs));
       return ResponseEntity.ok(new MessageResponse("Utilisateur enregistrer avec success!")) ;
 
     }

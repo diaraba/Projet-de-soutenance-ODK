@@ -1,11 +1,13 @@
 package com.diaraba.projetDeSoutenance.controllers;
 
+import com.diaraba.projetDeSoutenance.models.Abonnement;
 import com.diaraba.projetDeSoutenance.models.Annonce;
+import com.diaraba.projetDeSoutenance.models.Notification;
 import com.diaraba.projetDeSoutenance.models.Structure;
 import com.diaraba.projetDeSoutenance.payload.response.AnnonceResponse;
 import com.diaraba.projetDeSoutenance.payload.response.AvisOffreResponse;
-import com.diaraba.projetDeSoutenance.repository.AnnonceRepository;
-import com.diaraba.projetDeSoutenance.repository.StructureRepository;
+import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
+import com.diaraba.projetDeSoutenance.repository.*;
 import com.diaraba.projetDeSoutenance.security.services.StructureService;
 import com.diaraba.projetDeSoutenance.security.services.annonce.AnnonceService;
 import com.diaraba.projetDeSoutenance.utilis.ConfigImage;
@@ -34,13 +36,20 @@ public class AnnonceController {
     AnnonceRepository annonceRepository;
     @Autowired
     StructureRepository structureRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private AbonnementRepository abonnementRepository;
+    @Autowired
+    private UtilisateurRepository utilisateurRepository;
+
     @PostMapping("/creerAnnonce/{structure}")
     public ResponseEntity<?> creerAnnonce(@PathVariable Long structure,
                                           @Param("titre") String titre,
                                           @Param("contenu") String contenu,
                                           @Param("objet") String objet,
                                           @Param("image") MultipartFile image) throws IOException {
-
+        Structure structure1 = structureRepository.findByIduser(structure);
         Annonce annonce=new Annonce();
         String img = StringUtils.cleanPath(image.getOriginalFilename());
         annonce.setImage(img);
@@ -52,7 +61,24 @@ public class AnnonceController {
         annonce.setStructure(structureRepository.findByIduser(structure));
         annonce.setContenu(contenu);
         annonce.setTitre(titre);
-        return annonceService.creerAnnonce(annonce);
+        annonce=annonceService.creerAnnonce(annonce);
+        //Notification
+        Notification notification = new Notification();
+        notification.setStatus("true");
+        notification.setEtat("false");
+        notification.setTitre(structure1.getAlias());
+        notification.setContenu(" Cher utilisateur votre structure " + structure1.getAlias() + " vient de d'ajouter une nouvelle annonce");
+        Notification notification1 = notificationRepository.save(notification);
+
+        for (Abonnement abonnement :
+                abonnementRepository.findByStructure(structure1)) {
+            System.out.println(abonnement + "abonnementttttttttttttttttttttttt");
+            abonnement.getUtilisateurs().getNotifications().add(notification1);
+
+            utilisateurRepository.save(abonnement.getUtilisateurs());
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Annonce enregistrer avec success!"));
     }
 
     @PutMapping("/modifierAnnonce/{id}")

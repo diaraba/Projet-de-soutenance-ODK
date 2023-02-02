@@ -61,4 +61,34 @@ public class StructureController {
         return structureService.afficherAllStructure(pageNo,pageSize);
     }
 
+
+
+    @GetMapping("/afficherAllStructurestatus")
+    public ArrayList<List<Structure>> afficherAllStructureStatus()
+    {
+        System.out.println("jhvbeiuvmbbbbbbbbbkekkkkkkkkkkkkkkkkkkkkkkk");
+        List<Structure> structureList=structureRepository.findAll();
+        List<Structure> structureprive=new ArrayList<>();
+        List<Structure> structurepublic=new ArrayList<>();
+        System.out.println("jhvbeiuvmbbbbbbbbbkekkkkkkkkkkkkkkkkkkkkkkk");
+       ArrayList<List<Structure>> structureListfinal=new ArrayList<>();
+        System.out.println(structureList+"  jhvbeiuvmbbbbbbbbbkekkkkkkkkkkkkkkkkkkkkkkk");
+        for (Structure structure:structureList) {
+            System.out.println("jhvbeiuvmbbbbbbbbbkejjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+            Statut statut=statutRepository.findByName(EStatut.Prive).get();
+            if (structure.getStatuts().contains(statut)){
+                structureprive.add(structure);
+                System.out.println(structure +"jhvbeiuvmbbbbbbbbbkeiiiiiiiiiiiiiiiiiiiiiiiiii");
+            }
+            else {
+                structurepublic.add(structure);
+                System.out.println(structure +"jhvbeiuvmbbbbbbbbbkewwwwwwwwwwwwwwwwwwwwwwww");
+            }
+        }
+        structureListfinal.add(structureprive);
+        structureListfinal.add(structurepublic);
+
+        return structureListfinal;
+    }
+
 }
