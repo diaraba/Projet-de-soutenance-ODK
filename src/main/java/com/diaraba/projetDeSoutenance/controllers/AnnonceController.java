@@ -63,9 +63,14 @@ public class AnnonceController {
         annonce.setTitre(titre);
         annonce=annonceService.creerAnnonce(annonce);
         //Notification
+
+
         Notification notification = new Notification();
+        notification.setIdstructure(structure);
+        notification.setIdtarget(annonce.getIdannonce());
         notification.setStatus("true");
         notification.setEtat("false");
+        notification.setTarget("annonce");
         notification.setTitre(structure1.getAlias());
         notification.setContenu(" Cher utilisateur votre structure " + structure1.getAlias() + " vient de d'ajouter une nouvelle annonce");
         Notification notification1 = notificationRepository.save(notification);

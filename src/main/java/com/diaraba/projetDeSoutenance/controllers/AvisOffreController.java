@@ -77,8 +77,11 @@ public class AvisOffreController {
         avis = avisOffreService.creerAvisOffre(avis);
         //Notification
         Notification notification = new Notification();
+        notification.setIdstructure(structure);
+        notification.setIdtarget(avis.getIdavisoffre());
         notification.setStatus("true");
         notification.setEtat("false");
+        notification.setTarget("avis");
         notification.setTitre(structure1.getAlias());
         notification.setContenu(" Cher utilisateur votre structure " + structure1.getAlias() + " vient de d'ajouter un nouvel avis de " + typeOffre);
         Notification notification1 = notificationRepository.save(notification);
@@ -87,7 +90,6 @@ public class AvisOffreController {
                 abonnementRepository.findByStructure(structure1)) {
             System.out.println(abonnement + "abonnementttttttttttttttttttttttt");
             abonnement.getUtilisateurs().getNotifications().add(notification1);
-
             utilisateurRepository.save(abonnement.getUtilisateurs());
         }
         return ResponseEntity.ok(new MessageResponse("AvisOffre créer avec success!"));

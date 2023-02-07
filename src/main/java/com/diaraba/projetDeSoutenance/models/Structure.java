@@ -28,6 +28,7 @@ public class Structure extends User{
         @NotBlank
         @Size(max = 20)
         private String alias;
+        private String photodecouverture;
 /*
         @NotBlank
         @Size(max = 50)

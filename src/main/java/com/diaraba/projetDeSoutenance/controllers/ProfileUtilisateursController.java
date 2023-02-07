@@ -38,20 +38,27 @@ public class ProfileUtilisateursController {
                                                       @Param("genre") String genre,
                                                       @Param("numero") String numero,
                                                       @Param("situation") String situation,
-                                                      @Param("etat") String etat
-                                                       ) throws IOException {
+                                                      @Param("etat") String etat,
+                                                      @Param("image") MultipartFile image) throws IOException {
 
 
         ProfileUtilisateurs profileUtilisateurs=new ProfileUtilisateurs();
 
-/*
+
         String img = StringUtils.cleanPath(image.getOriginalFilename());
+        System.out.println(nom);
+        System.out.println(nom);
+        System.out.println(prenom);
+        System.out.println(genre);
+        System.out.println(etat);
+        System.out.println(numero);
+        System.out.println(situation);
+        System.out.println(image);
+
 
         String uploaDir =IMAGE_PATH;
         ConfigImage.saveimg(uploaDir, img, image);
-
-        @Param("image") MultipartFile image
-        profileUtilisateurs.setImage(img);*/
+        profileUtilisateurs.setImage(img);
         profileUtilisateurs.setNom(nom);
         profileUtilisateurs.setPrenom(prenom);
         profileUtilisateurs.setGenre(genre);
@@ -60,7 +67,7 @@ public class ProfileUtilisateursController {
         profileUtilisateurs.setSituation(situation);
         profileUtilisateurs.setUtilisateurs(utilisateurRepository.findByIduser(utilisateur));
 
-
+        System.out.println(profileUtilisateurs);
         return profileUtilisateursService.creerProfileUtilisateurs(profileUtilisateurs);
     }
     @CrossOrigin(origins = "http://localhost:8100")
@@ -80,6 +87,8 @@ public class ProfileUtilisateursController {
         System.out.println(numero);
         System.out.println(situation);
         ProfileUtilisateurs profileUtilisateurs;
+        Utilisateurs utilisateurs=utilisateurRepository.findByIduser(id);
+
 /*
         String img = StringUtils.cleanPath(image.getOriginalFilename());
 
@@ -91,7 +100,7 @@ public class ProfileUtilisateursController {
         */
 
 
-        profileUtilisateurs=profileUtilisateurRepository.findByIdutilisateur(id);
+        profileUtilisateurs=profileUtilisateurRepository.findByUtilisateurs(utilisateurs);
 
         ProfileUtilisateurs currentprofile=new ProfileUtilisateurs();
         System.out.println(profileUtilisateurs);

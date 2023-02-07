@@ -84,7 +84,7 @@ public class ProfileStructureController {
             System.out.println(profileStructure.getNom());
             profileStructure.setDescription(description);
             profileStructure.setLocalisation(localisation);
-            String uploaDir = "C:\\Users\\Ash Born\\Desktop\\Projet de soutenance\\src\\main\\resources\\assets\\image";
+            String uploaDir = IMAGE_PATH;
             ConfigImage.saveimg(uploaDir, img, image);
 
         return profileStructureService.updateProfileStructure(id, profileStructure);

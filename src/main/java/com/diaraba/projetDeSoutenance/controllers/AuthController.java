@@ -1,5 +1,6 @@
 package com.diaraba.projetDeSoutenance.controllers;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,10 +11,12 @@ import com.diaraba.projetDeSoutenance.payload.request.StructureRequest;
 import com.diaraba.projetDeSoutenance.repository.*;
 import com.diaraba.projetDeSoutenance.security.services.StructureService;
 import com.diaraba.projetDeSoutenance.security.services.UtilisateurService;
+import com.diaraba.projetDeSoutenance.utilis.ConfigImage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import com.diaraba.projetDeSoutenance.payload.request.LoginRequest;
@@ -29,7 +33,9 @@ import com.diaraba.projetDeSoutenance.payload.response.JwtResponse;
 import com.diaraba.projetDeSoutenance.payload.response.MessageResponse;
 import com.diaraba.projetDeSoutenance.security.jwt.JwtUtils;
 import com.diaraba.projetDeSoutenance.security.services.UserDetailsImpl;
+import org.springframework.web.multipart.MultipartFile;
 
+import static com.diaraba.projetDeSoutenance.utilis.constants.IMAGE_PATH;
 import static org.springframework.data.repository.init.ResourceReader.Type.JSON;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -326,7 +332,10 @@ public class AuthController {
     //CREER STRUCTURE
 
     @PostMapping("creerStructure")
-    public ResponseEntity<?> ajouterStructure(@RequestBody StructureRequest structureRequest) {
+    public ResponseEntity<?> ajouterStructure(@Param("objet") String objet,
+                                              @Param("photodecouverture") MultipartFile photodecouverture) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        StructureRequest structureRequest = mapper.readValue(objet, StructureRequest.class);
         Structure structure = new Structure(structureRequest.getAlias());
         structure.setEmail(structureRequest.getEmail());
         structure.setActivites(structureRequest.getActivites());
@@ -409,7 +418,13 @@ public class AuthController {
             });
         }
         structure.setRoles(roles);
-        return structureService.creerStructure(structure);
+
+            String img = StringUtils.cleanPath(photodecouverture.getOriginalFilename());
+            structure.setPhotodecouverture(img);
+            String uploaDir = IMAGE_PATH;
+            ConfigImage.saveimg(uploaDir, img, photodecouverture);
+
+            return structureService.creerStructure(structure);
     }
     }
 

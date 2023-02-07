@@ -75,4 +75,9 @@ public class NotificationController {
 
         return  notificationListnonLue.size();
     }
+    @GetMapping("affichernotifparid/{id}")
+    public Notification affichernotifparid(@PathVariable Long id){
+        return notificationRepository.findByIdnotification(id);
+    }
+
 }

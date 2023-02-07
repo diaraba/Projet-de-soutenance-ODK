@@ -1,6 +1,5 @@
 package com.diaraba.projetDeSoutenance.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,30 +8,38 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
+@Table(name = "demande")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Notification {
+public class Demande {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idnotification;
+    private Long idannonce;
 
+
+    private String nom;
+
+
+    private String email;
+
+
+    private String numero;
     @Size(max =10000)
     private String contenu;
 
-    private String titre;
+    private String objet;
 
-    private String status;
-
-    private String etat;
-    private  Long idtarget;
-    private  Long idstructure;
-    private String target;
+    private String emaildestinateur;
+    private String statut;
+    private String genre;
+    private String nomstructure;
 
 
+    @ManyToOne
+    Utilisateurs utilisateurs;
 }

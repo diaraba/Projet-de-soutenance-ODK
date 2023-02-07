@@ -34,7 +34,6 @@ public class ProfileUtilisateurs {
 
     @Size(max =10000)
     private String situation;
-    @JsonIgnore
     private String image;
     @ManyToOne
     Utilisateurs utilisateurs;
