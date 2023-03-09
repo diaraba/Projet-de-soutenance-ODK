@@ -99,7 +99,7 @@ public class EmailConstructor {
 		return messagePreparator;
 	}
 
-	public MimeMessagePreparator constructResetPasswordEmail(Utilisateurs user) {
+	public MimeMessagePreparator constructResetPasswordEmail(User user) {
 		Context context = new Context();
 		context.setVariable("utilisateur", user);
 		String text = templateEngine.process("updateUserProfileEmailTemplate", context);

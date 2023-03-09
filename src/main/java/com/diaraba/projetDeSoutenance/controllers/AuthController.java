@@ -286,12 +286,15 @@ public class AuthController {
                 });
             }
             if (signupRequest.getEmail() == null|| signupRequest.getEmail().trim().isEmpty()) {
+                System.out.println(signupRequest.getEmail()+"mmmmmmmmmmm");
                 utilisateurs.setEmail(utilisateurRepository.findByIduser(id).getEmail());
             }else{
                 utilisateurs.setEmail(signupRequest.getEmail());
             }
             if (signupRequest.getNomutilisateur() == null || signupRequest.getNomutilisateur().trim().isEmpty()) {
+                System.out.println(signupRequest.getNomutilisateur()+"eeeeee");
                 utilisateurs.setNomutilisateur(utilisateurRepository.findByIduser(id).getNomutilisateur());
+
             }else{
                 utilisateurs.setNomutilisateur(signupRequest.getNomutilisateur());
             }

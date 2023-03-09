@@ -1,6 +1,8 @@
 package com.diaraba.projetDeSoutenance.models;
 
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -22,25 +24,27 @@ public class ProfileStructure {
     @Size(max =100)
     private String nom;
 
-    @NotBlank
+
     private String activite;
 
 
-    @NotBlank
+
     private String localisation;
 
 
     private String image;
 
-    @NotBlank
+
     @Size(max =10000)
     private String description;
 
-    @NotBlank
+
     private String slogan;
-    @NotBlank
+
     @Size(max = 50)
     private String numero;
     @ManyToOne
+    @JoinColumn(name = "structure_iduser")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     Structure structure;
 }

@@ -32,7 +32,7 @@ public class AvisOffre {
     @NotBlank
     private String cible;
 
-
+private String avistype;
 
     private Date date;
     @NotBlank

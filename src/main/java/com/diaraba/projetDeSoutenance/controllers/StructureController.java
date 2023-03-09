@@ -4,6 +4,7 @@ package com.diaraba.projetDeSoutenance.controllers;
 import com.diaraba.projetDeSoutenance.models.EStatut;
 import com.diaraba.projetDeSoutenance.models.Statut;
 import com.diaraba.projetDeSoutenance.models.Structure;
+import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import com.diaraba.projetDeSoutenance.payload.response.StructureResponse;
 import com.diaraba.projetDeSoutenance.repository.StatutRepository;
 import com.diaraba.projetDeSoutenance.repository.StructureRepository;
@@ -89,6 +90,24 @@ public class StructureController {
         structureListfinal.add(structurepublic);
 
         return structureListfinal;
+    }
+
+
+
+    @GetMapping("/afficherAllStructureAllStatut")
+    public List<Structure>afficherAllStructure()
+    {
+        System.out.println("jhvbeiuvmbbbbbbbbbkekkkkkkkkkkkkkkkkkkkkkkk");
+        List<Structure> structureList=structureRepository.findAll();
+        System.out.println("jhvbeiuvmbbbbbbbbbkekkkkkkkkkkkkkkkkkkkkkkk");
+
+        System.out.println(structureList+"  jhvbeiuvmbbbbbbbbbkekkkkkkkkkkkkkkkkkkkkkkk");
+        return structureList;
+    }
+    @GetMapping("afficherStructureparid/{id}")
+    public Structure afficherStructureparid(@PathVariable Long id){
+        Structure structure=structureRepository.findByIduser(id);
+        return structure;
     }
 
 }

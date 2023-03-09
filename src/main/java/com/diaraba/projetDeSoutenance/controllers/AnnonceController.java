@@ -86,25 +86,58 @@ public class AnnonceController {
         return ResponseEntity.ok(new MessageResponse("Annonce enregistrer avec success!"));
     }
 
-    @PutMapping("/modifierAnnonce/{id}")
+    @PutMapping("/modifierAnnonce/{id}/{structure}")
     public ResponseEntity<?> update(@PathVariable Long id,
                                     @Param("titre") String titre,
                                     @Param("contenu") String contenu,
                                     @Param("objet") String objet,
-                                    @Param("structure") String structure,
+                                    @PathVariable Long structure,
                                     @Param("image") MultipartFile image) throws IOException {
 
         Annonce annonce=new Annonce();
-        String img = StringUtils.cleanPath(image.getOriginalFilename());
-        annonce.setImage(img);
-        String uploaDir = "C:\\Users\\Ash Born\\Desktop\\Projet de soutenance\\src\\main\\resources\\assets\\image";
-        ConfigImage.saveimg(uploaDir, img, image);
+        Annonce currentannonce= annonceRepository.findByIdannonce(id);
+        if(image==null ) {
+            String img =currentannonce.getImage();
+            annonce.setImage(img);
+        }else {
+            String img = StringUtils.cleanPath(image.getOriginalFilename());
+            String uploaDir =IMAGE_PATH;
+            ConfigImage.saveimg(uploaDir, img, image);
+            annonce.setImage(img);
+        }
+
+        if(titre==null) {
+            System.out.println("higyfutugyfklkcytcy"+currentannonce.getTitre());
+            annonce.setTitre(currentannonce.getTitre());
+        } else if ( titre.trim().isEmpty() ) {
+            annonce.setTitre(currentannonce.getTitre());
+        } else {
+            annonce.setTitre(titre);
+        }
+
+        if(contenu==null) {
+            System.out.println("higyfutugyfklkcytcy"+currentannonce.getContenu());
+            annonce.setContenu(currentannonce.getContenu());
+        } else if ( contenu.trim().isEmpty() ) {
+            annonce.setContenu(currentannonce.getContenu());
+        } else {
+            annonce.setContenu(contenu);
+        }
+
+        if(objet==null) {
+            System.out.println("higyfutugyfklkcytcy"+currentannonce.getObjet());
+            annonce.setObjet(currentannonce.getObjet());
+        } else if ( objet.trim().isEmpty() ) {
+            annonce.setObjet(currentannonce.getObjet());
+        } else {
+            annonce.setObjet(objet);
+        }
 
         annonce.setDate(new Date());
-        annonce.setObjet(objet);
-        annonce.setStructure(structureService.trouverStructureparalias(structure));
-        annonce.setContenu(contenu);
-        annonce.setTitre(titre);
+
+        annonce.setStructure(structureRepository.findByIduser(structure));
+
+
         return annonceService.updateAnnonce(id,annonce);
     }
 
@@ -125,6 +158,12 @@ public class AnnonceController {
     public Annonce afficherannonceparid(@PathVariable Long id){
         System.out.println(id);
     return annonceRepository.findByIdannonce(id);
+    }
+    @DeleteMapping("supprimerannonce/{idannonce}")
+    public ResponseEntity<?> supprimerannonce(@PathVariable Long idannonce){
+        Annonce annonce=annonceRepository.findByIdannonce(idannonce);
+        annonceRepository.delete(annonce);
+        return ResponseEntity.ok(new MessageResponse("Annonce supprimer avec success!")) ;
     }
 
 }

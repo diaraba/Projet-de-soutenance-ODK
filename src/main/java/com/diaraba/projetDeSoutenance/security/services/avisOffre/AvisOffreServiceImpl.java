@@ -45,6 +45,7 @@ public class AvisOffreServiceImpl implements AvisOffreService {
     @Override
     public ResponseEntity<?> updateAvisOffre(Long id, AvisOffre avisOffre) {
         avisOffre.setIdavisoffre(id);
+        avisOffreRepository.save(avisOffre);
         return ResponseEntity.ok(new MessageResponse("AvisOffre modifier avec success!"));
     }
 

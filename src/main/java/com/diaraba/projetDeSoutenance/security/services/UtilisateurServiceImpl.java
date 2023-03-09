@@ -2,6 +2,7 @@ package com.diaraba.projetDeSoutenance.security.services;
 
 import com.diaraba.projetDeSoutenance.models.Role;
 import com.diaraba.projetDeSoutenance.models.Structure;
+import com.diaraba.projetDeSoutenance.models.User;
 import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import com.diaraba.projetDeSoutenance.payload.request.SignupRequest1;
 import com.diaraba.projetDeSoutenance.payload.request.StructureRequest1;
@@ -43,6 +44,7 @@ public class UtilisateurServiceImpl implements  UtilisateurService {
     JavaMailSender mailSender;
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     private SignupRequest1 mapToDTO(Utilisateurs utilisateur){
         SignupRequest1 signupRequest1=new SignupRequest1();
@@ -107,17 +109,19 @@ public class UtilisateurServiceImpl implements  UtilisateurService {
         String encryptedPassword = bCryptPasswordEncoder.encode(password);
         utilisateurs.setPassword(encryptedPassword);
         utilisateurRepository.save(utilisateurs);
-        mailSender.send(emailConstructor.constructResetPasswordEmail(utilisateurs));
+        mailSender.send(emailConstructor.constructUpdateUserProfileEmail(utilisateurs, password));
 
         return  ResponseEntity.ok(new MessageResponse("Mot de passe changer avec success!")) ;
 
     }
     @Override
-    public ResponseEntity<?> updateMotdepasse(Utilisateurs utilisateurs, String nouveaumotdepasse) {
+    public ResponseEntity<?> updateMotdepasse(User user, String nouveaumotdepasse) {
+        System.out.println(nouveaumotdepasse+" testttttttttttttttttttttttttttttttttttttttttttttttt");
         String encryptedPassword = bCryptPasswordEncoder.encode(nouveaumotdepasse);
-        utilisateurs.setPassword(encryptedPassword);
-        utilisateurRepository.save(utilisateurs);
-        mailSender.send(emailConstructor.constructUpdateUserProfileEmail(utilisateurs,nouveaumotdepasse));
+        System.out.println(encryptedPassword+" testtttttttttttttttttttttttttttttttttttttttttttttttEncrypt");
+        user.setPassword(encryptedPassword);
+        userRepository.save(user);
+        mailSender.send(emailConstructor.constructResetPasswordEmail(user));
         return  ResponseEntity.ok(new MessageResponse("Mot de passe changer avec success!")) ;
 
     }

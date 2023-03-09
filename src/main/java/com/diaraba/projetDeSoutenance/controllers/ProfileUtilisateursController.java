@@ -62,7 +62,12 @@ public class ProfileUtilisateursController {
         profileUtilisateurs.setNom(nom);
         profileUtilisateurs.setPrenom(prenom);
         profileUtilisateurs.setGenre(genre);
-        profileUtilisateurs.setEtat(etat);
+        if (etat==null){
+            profileUtilisateurs.setEtat("true");
+        }else{
+            profileUtilisateurs.setEtat(etat);
+        }
+
         profileUtilisateurs.setNumero(numero);
         profileUtilisateurs.setSituation(situation);
         profileUtilisateurs.setUtilisateurs(utilisateurRepository.findByIduser(utilisateur));
@@ -77,76 +82,93 @@ public class ProfileUtilisateursController {
                                     @Param("genre") String genre,
                                     @Param("numero") String numero,
                                     @Param("situation") String situation,
-                                    @Param("etat") String etat
-
+                                    @Param("etat") String etat,
+                                    @Param("image") MultipartFile image
                                     ) throws IOException {
 
         System.out.println(nom);
         System.out.println(prenom);
         System.out.println(genre);
-        System.out.println(numero);
-        System.out.println(situation);
+        System.out.println(numero +"dddddddddddddddddddd");
+        System.out.println(situation+"dddddddddddddddddddd");
+        System.out.println(etat);
+        System.out.println(image+"nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
         ProfileUtilisateurs profileUtilisateurs;
         Utilisateurs utilisateurs=utilisateurRepository.findByIduser(id);
 
-/*
-        String img = StringUtils.cleanPath(image.getOriginalFilename());
-
-        String uploaDir = IMAGE_PATH;
-        ConfigImage.saveimg(uploaDir, img, image);
-        profileUtilisateurs.setImage(img);
-
-        @RequestParam( value = "image", required = false) MultipartFile image
-        */
 
 
         profileUtilisateurs=profileUtilisateurRepository.findByUtilisateurs(utilisateurs);
 
         ProfileUtilisateurs currentprofile=new ProfileUtilisateurs();
+
         System.out.println(profileUtilisateurs);
-        if(nom== null || nom.trim().isEmpty()) {
+        if(nom==null) {
+            System.out.println(profileUtilisateurs.getNom());
             currentprofile.setNom(profileUtilisateurs.getNom());
-        }else {
+        } else if ( nom.trim().isEmpty()) {
+            currentprofile.setNom(profileUtilisateurs.getNom());
+        } else {
+            System.out.println(nom);
             currentprofile.setNom(nom);
         }
 
-        if(prenom== null || prenom.trim().isEmpty()) {
+        if(prenom==null) {
             currentprofile.setPrenom(profileUtilisateurs.getPrenom());
-        }else {
+        } else if (prenom.trim().isEmpty()) {
+            currentprofile.setPrenom(profileUtilisateurs.getPrenom());
+        } else {
             currentprofile.setPrenom(prenom);
         }
 
-        if(genre==null|| genre.trim().isEmpty()) {
+        if(genre==null) {
             currentprofile.setGenre(profileUtilisateurs.getGenre());
-        }else {
-            currentprofile.setGenre(genre);
-        }
+        }else if (genre.trim().isEmpty()){
+            currentprofile.setGenre(profileUtilisateurs.getGenre());
+        } else currentprofile.setGenre(genre);
 
-        if(situation== null || situation.trim().isEmpty() ) {
-
+        if(situation==null) {
             System.out.println("higyfutugyfklkcytcy"+profileUtilisateurs.getSituation());
             currentprofile.setSituation(profileUtilisateurs.getSituation());
-
-        }else {
+        } else if ( situation.trim().isEmpty() ) {
+            currentprofile.setSituation(profileUtilisateurs.getSituation());
+        } else {
             currentprofile.setSituation(situation);
 
         }
 
-        if(numero== null || numero.trim().isEmpty()) {
+        if(numero==null ) {
             currentprofile.setNumero(profileUtilisateurs.getNumero());
-        }else {
+        } else if ( numero.trim().isEmpty()) {
+            currentprofile.setNumero(profileUtilisateurs.getNumero());
+        } else {
             currentprofile.setNumero(numero);
         }
 
-        if(etat== null) {
+        if(etat==null) {
             currentprofile.setEtat(profileUtilisateurs.getEtat());
-        }else {
+        }else if(etat.trim().isEmpty()){
+            currentprofile.setEtat(profileUtilisateurs.getEtat());
+        }
+        else {
             currentprofile.setEtat(etat);
+        }
+
+        if(image==null ) {
+            String img =profileUtilisateurs.getImage();
+            currentprofile.setImage(img);
+        }else {
+            String img = StringUtils.cleanPath(image.getOriginalFilename());
+            String uploaDir =IMAGE_PATH;
+            ConfigImage.saveimg(uploaDir, img, image);
+            currentprofile.setImage(img);
         }
 
         currentprofile.setUtilisateurs(profileUtilisateurs.getUtilisateurs());
 
-        return profileUtilisateursService.updateProfileUtilisateurs(id,currentprofile);
+
+
+        return profileUtilisateursService.updateProfileUtilisateurs(profileUtilisateurs.getIdutilisateur(),currentprofile);
     }
     @GetMapping("afficherprofile/{id}")
     public ProfileUtilisateurs afficherprofile(@PathVariable Long id){

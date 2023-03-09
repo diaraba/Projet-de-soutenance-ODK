@@ -2,6 +2,7 @@ package com.diaraba.projetDeSoutenance.repository;
 
 import java.util.Optional;
 
+import com.diaraba.projetDeSoutenance.models.Utilisateurs;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Boolean existsByEmail(String email);
 
   User findByEmail(String email);
+  User findByIduser(Long iduser);
+
 
 
 }
